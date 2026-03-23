@@ -73,3 +73,5 @@ export default defineConfig([
   },
 ])
 ```
+# NexusRTC
+A Cross-Platform WebRTC Suite
