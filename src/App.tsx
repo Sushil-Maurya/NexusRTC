@@ -1,121 +1,80 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import React from 'react';
+import { ThemeProvider } from './contexts/ThemeContext';
+import { CallProvider, useCallContext } from './contexts/CallContext';
+import { ThemeToggle } from './components/ThemeToggle';
+import { VideoTile } from './components/VideoTile';
+import { Controls } from './components/Controls';
+import { Video } from 'lucide-react';
 
-function App() {
-  const [count, setCount] = useState(0)
+const Dashboard: React.FC = () => {
+  const { localStream, remoteStream, callState } = useCallContext();
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div className="min-h-screen bg-gray-50 dark:bg-[#0a0a0f] text-gray-900 dark:text-gray-100 transition-colors duration-300 relative overflow-hidden flex flex-col items-center font-sans">
+      {/* Dynamic Background Elements for Glassmorphism Context */}
+      <div className="absolute top-[-15%] left-[-10%] w-[50%] h-[50%] bg-purple-500/20 dark:bg-purple-600/10 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-[-15%] right-[-10%] w-[50%] h-[50%] bg-blue-500/20 dark:bg-blue-600/10 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-[40%] left-[50%] translate-x-[-50%] w-[30%] h-[30%] bg-emerald-500/10 dark:bg-emerald-600/5 rounded-full blur-[100px] pointer-events-none" />
 
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+      {/* Header */}
+      <header className="w-full max-w-7xl mx-auto px-6 py-6 flex items-center justify-between z-10 relative">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-[0_0_20px_rgba(168,85,247,0.4)]">
+            <Video className="text-white" size={26} strokeWidth={2.5} />
+          </div>
+          <h1 className="text-3xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400">
+            NexusRTC
+          </h1>
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
+        <div className="flex items-center gap-6">
+          <div className={`px-5 py-2 rounded-full text-sm font-bold tracking-wide border shadow-sm transition-colors duration-300 ${
+            callState === 'Connected' ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' :
+            callState === 'Calling' ? 'border-amber-500/40 bg-amber-500/10 text-amber-600 dark:text-amber-400' :
+            'border-gray-300/50 dark:border-gray-700/50 bg-white/50 dark:bg-gray-800/50 text-gray-600 dark:text-gray-300 backdrop-blur-md'
+          }`}>
+            <span className="flex items-center gap-2">
+              <span className={`w-2 h-2 rounded-full ${
+                callState === 'Connected' ? 'bg-emerald-500 animate-pulse' :
+                callState === 'Calling' ? 'bg-amber-500 animate-pulse' :
+                'bg-gray-400'
+              }`}></span>
+              {callState}
+            </span>
+          </div>
+          <ThemeToggle />
         </div>
-      </section>
+      </header>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
-}
+      {/* Main Grid Area */}
+      <main className="flex-1 w-full max-w-7xl mx-auto px-6 py-4 z-10 flex flex-col justify-center mb-24 relative">
+        <div className={`grid gap-6 w-full transition-all duration-500 ease-in-out ${remoteStream ? 'grid-cols-1 lg:grid-cols-2 h-[65vh]' : 'grid-cols-1 max-w-4xl mx-auto h-[60vh]'}`}>
+          
+          <div className="h-full w-full relative group">
+            <VideoTile stream={localStream} isLocal name="Sushil" />
+          </div>
 
-export default App
+          {remoteStream && (
+            <div className="h-full w-full animate-in fade-in slide-in-from-right-8 duration-500 relative group">
+              <VideoTile stream={remoteStream} name="Remote Peer" />
+            </div>
+          )}
+
+        </div>
+      </main>
+
+      <Controls />
+    </div>
+  );
+};
+
+export const App: React.FC = () => {
+  return (
+    <ThemeProvider>
+      <CallProvider>
+        <Dashboard />
+      </CallProvider>
+    </ThemeProvider>
+  );
+};
+
+export default App;
