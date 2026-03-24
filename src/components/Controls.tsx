@@ -4,8 +4,8 @@ import { useWebRTC } from '../hooks/useWebRTC';
 import { Mic, MicOff, Video, VideoOff, Phone, PhoneOff, Settings } from 'lucide-react';
 
 export const Controls: React.FC = () => {
-  const { callState, isMuted, setIsMuted, isVideoOff, setIsVideoOff } = useCallContext();
-  const { toggleMute, toggleVideo, endCall, initiateCall } = useWebRTC();
+  const { callState, isMuted, setIsMuted, isVideoOff, setIsVideoOff, isScreenSharing } = useCallContext();
+  const { toggleMute, toggleVideo, endCall, initiateCall, toggleScreenShare } = useWebRTC();
 
   const handleMute = () => {
     toggleMute();
@@ -41,6 +41,21 @@ export const Controls: React.FC = () => {
         aria-label={isVideoOff ? 'Turn on camera' : 'Turn off camera'}
       >
         {isVideoOff ? <VideoOff size={22} strokeWidth={2.5} /> : <Video size={22} strokeWidth={2.5} />}
+      </button>
+
+      <button
+        onClick={toggleScreenShare}
+        className={`p-4 rounded-full transition-all duration-300 hover:scale-105 active:scale-95 shadow-lg flex items-center justify-center hidden md:flex ${
+          isScreenSharing 
+            ? 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-emerald-500/30' 
+            : 'bg-white/90 hover:bg-white dark:bg-gray-700/80 dark:hover:bg-gray-600/90 text-gray-800 dark:text-gray-100 shadow-black/5'
+        }`}
+        aria-label={isScreenSharing ? 'Stop screen sharing' : 'Start screen sharing'}
+      >
+        {/* We can temporarily use a generic icon or a screen share specific one if imported */}
+        <div className="relative">
+           <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path><path d="M12 12v9"></path><path d="m8 17 4 4 4-4"></path></svg>
+        </div>
       </button>
 
       <div className="w-px h-8 bg-gray-300/50 dark:bg-white/10 mx-1 rounded-full" />

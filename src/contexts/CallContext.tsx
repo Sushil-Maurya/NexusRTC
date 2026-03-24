@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
-import type { CallState } from '../types';
+import type { CallState, ChatMessage, FileData } from '../types';
 
 interface CallContextType {
   callState: CallState;
@@ -12,6 +12,14 @@ interface CallContextType {
   setIsMuted: React.Dispatch<React.SetStateAction<boolean>>;
   isVideoOff: boolean;
   setIsVideoOff: React.Dispatch<React.SetStateAction<boolean>>;
+  isScreenSharing: boolean;
+  setIsScreenSharing: React.Dispatch<React.SetStateAction<boolean>>;
+  messages: ChatMessage[];
+  setMessages: React.Dispatch<React.SetStateAction<ChatMessage[]>>;
+  files: FileData[];
+  setFiles: React.Dispatch<React.SetStateAction<FileData[]>>;
+  connectedUsers: string[];
+  setConnectedUsers: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 const CallContext = createContext<CallContextType | undefined>(undefined);
@@ -22,6 +30,10 @@ export const CallProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
   const [isMuted, setIsMuted] = useState(false);
   const [isVideoOff, setIsVideoOff] = useState(false);
+  const [isScreenSharing, setIsScreenSharing] = useState(false);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [files, setFiles] = useState<FileData[]>([]);
+  const [connectedUsers, setConnectedUsers] = useState<string[]>([]);
 
   return (
     <CallContext.Provider
@@ -36,6 +48,14 @@ export const CallProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setIsMuted,
         isVideoOff,
         setIsVideoOff,
+        isScreenSharing,
+        setIsScreenSharing,
+        messages,
+        setMessages,
+        files,
+        setFiles,
+        connectedUsers,
+        setConnectedUsers,
       }}
     >
       {children}

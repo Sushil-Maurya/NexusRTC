@@ -4,6 +4,8 @@ import { CallProvider, useCallContext } from './contexts/CallContext';
 import { ThemeToggle } from './components/ThemeToggle';
 import { VideoTile } from './components/VideoTile';
 import { Controls } from './components/Controls';
+import { Sidebar } from './components/Sidebar';
+import { ChatPanel } from './components/ChatPanel';
 import { Video } from 'lucide-react';
 
 const Dashboard: React.FC = () => {
@@ -46,23 +48,28 @@ const Dashboard: React.FC = () => {
       </header>
 
       {/* Main Grid Area */}
-      <main className="flex-1 w-full max-w-7xl mx-auto px-6 py-4 z-10 flex flex-col justify-center mb-24 relative">
-        <div className={`grid gap-6 w-full transition-all duration-500 ease-in-out ${remoteStream ? 'grid-cols-1 lg:grid-cols-2 h-[65vh]' : 'grid-cols-1 max-w-4xl mx-auto h-[60vh]'}`}>
-          
-          <div className="h-full w-full relative group">
-            <VideoTile stream={localStream} isLocal name="Sushil" />
-          </div>
+      <main className="flex-1 w-full mx-auto z-10 flex h-[calc(100vh-100px)] overflow-hidden">
+        <Sidebar />
 
-          {remoteStream && (
-            <div className="h-full w-full animate-in fade-in slide-in-from-right-8 duration-500 relative group">
-              <VideoTile stream={remoteStream} name="Remote Peer" />
+        <div className="flex-1 flex flex-col justify-center px-6 relative h-full">
+          <div className={`grid gap-6 w-full transition-all duration-500 ease-in-out ${remoteStream ? 'grid-cols-1 lg:grid-cols-2 h-full py-6' : 'grid-cols-1 max-w-4xl mx-auto h-[70vh]'}`}>
+            
+            <div className={`h-full w-full relative group transition-all duration-500 ease-in-out ${remoteStream ? 'rounded-2xl overflow-hidden' : ''}`}>
+              <VideoTile stream={localStream} isLocal name="Me" />
             </div>
-          )}
 
+            {remoteStream && (
+              <div className="h-full w-full animate-in fade-in slide-in-from-right-8 duration-500 relative group rounded-2xl overflow-hidden">
+                <VideoTile stream={remoteStream} name="Remote Peer" />
+              </div>
+            )}
+
+          </div>
+          <Controls />
         </div>
-      </main>
 
-      <Controls />
+        <ChatPanel />
+      </main>
     </div>
   );
 };
