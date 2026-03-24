@@ -9,7 +9,7 @@ import { ChatPanel } from './components/ChatPanel';
 import { Video } from 'lucide-react';
 
 const Dashboard: React.FC = () => {
-  const { localStream, remoteStream, callState } = useCallContext();
+  const { localStream, remoteStream, callState, isSidebarOpen } = useCallContext();
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#0a0a0f] text-gray-900 dark:text-gray-100 transition-colors duration-300 relative overflow-hidden flex flex-col items-center font-sans">
@@ -19,7 +19,7 @@ const Dashboard: React.FC = () => {
       <div className="absolute top-[40%] left-[50%] translate-x-[-50%] w-[30%] h-[30%] bg-emerald-500/10 dark:bg-emerald-600/5 rounded-full blur-[100px] pointer-events-none" />
 
       {/* Header */}
-      <header className="w-full max-w-7xl mx-auto px-6 py-6 flex items-center justify-between z-10 relative">
+      <header className={`w-full max-w-7xl mx-auto px-6 py-6 flex items-center justify-between z-10 relative transition-all duration-300 ${isSidebarOpen ? 'pl-[280px]' : ''}`}>
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-[0_0_20px_rgba(168,85,247,0.4)]">
             <Video className="text-white" size={26} strokeWidth={2.5} />
@@ -48,11 +48,11 @@ const Dashboard: React.FC = () => {
       </header>
 
       {/* Main Grid Area */}
-      <main className="flex-1 w-full mx-auto z-10 flex h-[calc(100vh-100px)] overflow-hidden">
+      <main className={`flex-1 w-full flex h-[calc(100vh-100px)] overflow-hidden transition-all duration-300 ${isSidebarOpen ? 'pl-64' : 'pl-0'}`}>
         <Sidebar />
 
         <div className="flex-1 flex flex-col justify-center px-6 relative h-full">
-          <div className={`grid gap-6 w-full transition-all duration-500 ease-in-out ${remoteStream ? 'grid-cols-1 lg:grid-cols-2 h-full py-6' : 'grid-cols-1 max-w-4xl mx-auto h-[70vh]'}`}>
+          <div className={`grid gap-6 w-full max-w-7xl mx-auto transition-all duration-500 ease-in-out ${remoteStream ? 'grid-cols-1 lg:grid-cols-2 h-full py-6' : 'grid-cols-1 max-w-4xl mx-auto h-[70vh]'}`}>
             
             <div className={`h-full w-full relative group transition-all duration-500 ease-in-out ${remoteStream ? 'rounded-2xl overflow-hidden' : ''}`}>
               <VideoTile stream={localStream} isLocal name="Me" />

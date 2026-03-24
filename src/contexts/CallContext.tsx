@@ -20,6 +20,10 @@ interface CallContextType {
   setFiles: React.Dispatch<React.SetStateAction<FileData[]>>;
   connectedUsers: string[];
   setConnectedUsers: React.Dispatch<React.SetStateAction<string[]>>;
+  isSidebarOpen: boolean;
+  setIsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isChatOpen: boolean;
+  setIsChatOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const CallContext = createContext<CallContextType | undefined>(undefined);
@@ -34,6 +38,8 @@ export const CallProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [files, setFiles] = useState<FileData[]>([]);
   const [connectedUsers, setConnectedUsers] = useState<string[]>([]);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   return (
     <CallContext.Provider
@@ -56,6 +62,10 @@ export const CallProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setFiles,
         connectedUsers,
         setConnectedUsers,
+        isSidebarOpen,
+        setIsSidebarOpen,
+        isChatOpen,
+        setIsChatOpen,
       }}
     >
       {children}
